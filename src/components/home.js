@@ -1,10 +1,10 @@
 import React from 'react';
-import './App.css';
-import firebase from './firebase';
+import '../App.css';
+import firebase from '../firebase';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
+import { Link } from 'react-router-dom';
 
 class Home extends React.Component{
   constructor(props){
@@ -23,32 +23,58 @@ class Home extends React.Component{
           }
           },
           {
-            headerName: "Room No", field: "rId",sortable: true,filter:true,
+            headerName: "Room No", field: "room",sortable: true,filter:true,
           },
           {
           headerName: "ID", field: "bId",sortable: true,filter:true,
           cellRenderer: (cellValue) =>
-              `<a href="/booking/${cellValue.value}" >${cellValue.value}</a>`
+              `<a href="/show/${cellValue.value}" >${cellValue.value}</a>`
         }, {
           headerName: "Name", field: "name",sortable: true,filter:true
         }, {
           headerName: "Status", field: "status",sortable: true ,filter:true
-        }]
+        },
+        {
+          headerName: "From", field: "from",sortable: true ,filter:true,
+        },
+        {
+          headerName: "To", field: "to",sortable: true ,filter:true,
+        },
+      ]
       }
   }
 
+    dateToString=(date)=>{
+      var dd = date.getDate();
+      var mm = date.getMonth() + 1;
+
+      var yyyy = date.getFullYear();
+      if (dd < 10) {
+        dd = '0' + dd;
+      } 
+      if (mm < 10) {
+        mm = '0' + mm;
+      } 
+      return dd + '/' + mm + '/' + yyyy;
+    }
+
     onCollectionUpdate = (querySnapshot) => {
     let bookingsList = [];
-    
+
     querySnapshot.forEach((doc) => {
-      let { checkedIn, bId, room, name, status  } = doc.data();
-      console.log(doc.id);
+      
+       var toDate = this.dateToString((doc.get('to')).toDate());
+       var fromDate = this.dateToString((doc.get('from')).toDate());
+      
+      let { checkedIn, room, name, status, from, to  } = doc.data();
       bookingsList.push({
         checkedIn,   
         bId:doc.id, 
         room, 
         name, 
-        status
+        status,
+        from:fromDate,
+        to: toDate
       });
     });
     
@@ -85,10 +111,10 @@ class Home extends React.Component{
       <div 
         className="ag-theme-balham"
         style={{ 
-        height: '550px', 
+        height: '500px', 
         width: '1200px' }} 
       >
-
+        <h4><Link to="/create" className="btn btn-primary">Add Booking</Link></h4>
         <AgGridReact
           pagination = {true}
           columnDefs={this.state.columnDefs}

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './home';
-import Booking from './booking';
+import Home from './components/home';
+import Booking from './components/booking';
+import timestampToDate from 'timestampToDate';
 
 class App extends Component {
   render() {
@@ -10,7 +11,9 @@ class App extends Component {
         <div>
           <Switch>
               <Route exact path='/' component={Home} />
-              <Route path='/booking/:id' component={Booking} />
+              <Route path='/show/:id' component={Booking} />
+              <Route path='/edit/:id' component={Edit} />
+              <Route path='/create' component={Create} />
           </Switch>
         </div>
       </Router>
