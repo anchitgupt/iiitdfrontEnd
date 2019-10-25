@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "iiitdguesthouseapp",
+    "IIITD Guest House Booking": "iiitd-dashboard",
+    "initial": "iiitd-dashboard"
+  }
+}

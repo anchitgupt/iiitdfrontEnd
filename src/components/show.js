@@ -37,10 +37,9 @@ class Show extends React.Component{
         ref.get().then((doc) => {
           if (doc.exists) {
             let data = {}
-            data.name = doc.name;
-            data.status = doc.status;
-            data.room = doc.room;
-            data.checkedIn = doc.checkedIn
+            data.name = doc.get('name');
+            data.status = doc.get('status');
+            data.room = doc.get('room');
             data.from =  this.dateToString((doc.get('from')).toDate());
             data.to =  this.dateToString((doc.get('to')).toDate());
             this.setState({
@@ -68,11 +67,13 @@ class Show extends React.Component{
       render() {
         return (
           <div class="container">
+            <hr></hr>
+            <h2><Link to="/" className="btn btn-primary">Home</Link></h2>
             <div class="panel panel-default">
               <div class="panel-heading">
-              <h4><Link to="/" className="btn btn-primary">Booking List</Link></h4>
+              
                 <h3 class="panel-title">
-                  {this.state.booking.name}
+                  Name:{this.state.booking.name}
                 </h3>
               </div>
               <div class="panel-body">
@@ -83,8 +84,6 @@ class Show extends React.Component{
                   <dd>{this.state.booking.status}</dd>
                   <dt>Room No:</dt>
                   <dd>{this.state.booking.room}</dd>
-                  <dt>Checked In:</dt>
-                  <dd>{this.state.booking.checkedIn}</dd>
                   <dt>From:</dt>
                   <dd>{this.state.booking.from}</dd>
                   <dt>To:</dt>

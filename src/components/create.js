@@ -12,7 +12,6 @@ class Create extends Component {
     this.ref = firebase.firestore().collection('bookings');
     this.state = {
       room: '',
-      checkedIn: '',
       name:'',
       status:'',
       from:new Date(),
@@ -51,7 +50,6 @@ class Create extends Component {
     let toTime = this.getTimeStamp(to);
     this.ref.add({
       room,
-        checkedIn,
         name,
         status,
         from:fromTime,
@@ -59,7 +57,6 @@ class Create extends Component {
     }).then((docRef) => {
       this.setState({
         room: '',
-      checkedIn: '',
       name:'',
       status:'',
       from:new Date(),
@@ -76,6 +73,8 @@ class Create extends Component {
     const { room, checkedIn, name, status } = this.state;
     return (
       <div className="container">
+        <hr></hr>
+        <h4><Link to="/" className="btn btn-primary">Home</Link></h4>
         <div className="panel panel-default">
           <div className="panel-heading">
             <h3 className="panel-title">
@@ -83,7 +82,6 @@ class Create extends Component {
             </h3>
           </div>
           <div className="panel-body">
-            <h4><Link to="/" className="btn btn-primary">Booking List</Link></h4>
             <form onSubmit={this.onSubmit}>
             <div className="form-group">
                 <label htmlFor="name">Name:</label>
@@ -95,12 +93,12 @@ class Create extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="status">Status:</label>
-                <input type="text" className="form-control" name="status" value={status} onChange={this.onChange} placeholder="Status" />
-              </div>
-              <div className="form-group">
-                <label htmlFor="author">Checked In:</label>
-                <input type="text" className="form-control" name="checkedIn" value={checkedIn} onChange={this.onChange} placeholder="checked In" />
-              </div>
+                <select name = "status" onChange={this.onChange} value={this.state.status} class="form-control form-control-lg">
+              <option value="Requsted">Requsted</option>
+            <option value="Approved">Approved</option>
+            <option value="CheckedIn">CheckedIn</option>
+            <option value="CheckedOut">CheckedOut</option>
+              </select>              </div>
               <div className="form-group">
                 <label htmlFor="from">From: </label>
                 <br></br><DatePicker selected={this.state.from} dateFormat="dd/MM/yyyy" onChange={this.handleChangeFrom}/>  

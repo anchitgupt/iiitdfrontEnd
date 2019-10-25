@@ -17,12 +17,6 @@ class Home extends React.Component{
         bookings : [],
         columnDefs: [
           {
-            headerName: "Checked In", field: "checkedIn",filter:true,
-            cellRenderer: params => {
-              return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
-          }
-          },
-          {
             headerName: "Room No", field: "room",sortable: true,filter:true,
           },
           {
@@ -86,23 +80,6 @@ class Home extends React.Component{
 
   componentDidMount(){
     this.unsubscribe = this.bookingsRef.onSnapshot(this.onCollectionUpdate);
-    //let bookingsList = []
-    // this.bookingsRef.get().then((data)=>{
-    //   let docs = data.docs;
-    //   docs.forEach(doc => {
-    //     let { checkedIn,room, name, status  } = doc.data();
-    //     bookingsList.push({
-    //         checkedIn,   
-    //         bId:doc.id, 
-    //     room, 
-    //     name, 
-    //     status
-    //     });  
-    //   });
-    //   this.setState({
-    //     bookings:bookingsList
-    //   })
-    // })
   }
 
 
@@ -114,6 +91,8 @@ class Home extends React.Component{
         height: '500px', 
         width: '1200px' }} 
       >
+        <hr></hr>
+        
         <h4><Link to="/create" className="btn btn-primary">Add Booking</Link></h4>
         <AgGridReact
           pagination = {true}

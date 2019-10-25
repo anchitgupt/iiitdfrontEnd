@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import './edit.css'
 
 class Edit extends Component {
 
@@ -12,7 +13,6 @@ class Edit extends Component {
     this.state = {
       key: '',
       room: '',
-      checkedIn: '',
       name:'',
       status:'',
       from:new Date(),
@@ -25,6 +25,13 @@ class Edit extends Component {
       to: date
     });
   };
+
+
+  onChangeDropdown = val =>{
+    this.setState({
+      status: val
+    });
+  }
 
   handleChangeFrom = date => {
     this.setState({
@@ -40,7 +47,6 @@ class Edit extends Component {
         this.setState({
           key: doc.id,
           room: booking.room,
-          checkedIn: booking.checkedIn,
           name:booking.name,
           status:booking.status,
           from:booking.from.toDate(),
@@ -55,19 +61,24 @@ class Edit extends Component {
   onChange = (e) => {
     const state = this.state
     state[e.target.name] = e.target.value;
+    debugger
     this.setState({booking:state});
+  }
+
+  getTimeStamp = (time) =>{
+    return firebase.firestore.Timestamp.fromDate(time);
   }
 
   onSubmit = (e) => {
     e.preventDefault();
+    
 
-    const { room, checkedIn, name, status ,from ,to } = this.state;
+    const { room, name, status ,from ,to } = this.state;
     let fromTime = this.getTimeStamp(from);
     let toTime = this.getTimeStamp(to);
     const updateRef = firebase.firestore().collection('bookings').doc(this.state.key);
     updateRef.set({
         room,
-        checkedIn,
         name,
         status,
         from:fromTime,
@@ -78,7 +89,6 @@ class Edit extends Component {
       this.setState({
       key: '',
       room: '',
-      checkedIn: '',
       name:'',
       status:'',
       from:new Date(),
@@ -90,10 +100,13 @@ class Edit extends Component {
       console.error("Error adding document: ", error);
     });
   }
+  
 
   render() {
     return (
       <div class="container">
+        <hr></hr>
+        <h2><Link to="/" className="btn btn-primary" >Home</Link></h2>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
@@ -101,20 +114,20 @@ class Edit extends Component {
             </h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/" className="btn btn-primary" >BOOKING List</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div class="form-group">
                 <label for="room">Room:</label>
-                <input type="text" class="form-control" name="room" value={this.state.room} onChange={this.onChange} placeholder="Room" />
-              </div>
-              <div class="form-group">
-                <label for="checkedIn">Checked In:</label>
-                <input type="text" class="form-control" name="checkedIn" value={this.state.checkedIn} onChange={this.onChange} placeholder="Checked In" />
+                <input type="text" class="form-control" name="room" value={this.state.room}   placeholder="Room" />
               </div>
 
               <div class="form-group">
-                <label for="status">Status:</label>
-                <input type="text" class="form-control" name="status" value={this.state.status} onChange={this.onChange} placeholder="Status" />
+              <label for="name">Status:</label>
+              <select name = "status" onChange={this.onChange} value={this.state.status} class="form-control form-control-lg">
+              <option value="Requsted">Requsted</option>
+            <option value="Approved">Approved</option>
+            <option value="CheckedIn">CheckedIn</option>
+            <option value="CheckedOut">CheckedOut</option>
+              </select>
               </div>
 
               <div class="form-group">
