@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
 
-
  const DB_CONFIG  = {
     apiKey: "AIzaSyCN4YbzYF5WLwRwnglCX2r4IcehS8aPDOQ",
     authDomain: "iiitdguesthouseapp.firebaseapp.com",
@@ -11,8 +10,12 @@ import * as firebase from 'firebase';
     appId: "1:957363277650:web:7241b0ceefa7adb5e6348b"
   };
 
+firebase.initializeApp(DB_CONFIG);
+var firestore = firebase.firestore();
+var settings = { timestampsInSnapshots: true }; // force Timestamp object instead of Date
+firestore.settings(settings);
 
-  firebase.initializeApp(DB_CONFIG);
+
 
 
   export default firebase;

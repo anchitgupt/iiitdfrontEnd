@@ -10,55 +10,91 @@ class Show extends React.Component{
         super(props);
         //const {id} = props.match.params
         this.db = firebase.firestore();
-        this.bookingsRef = this.db.collection('bookings');
+        this.bookingsRef = this.db.collection('admin_req');
         this.state = {
             booking: {},
-            key: ''
+            key: '',
+            arrivalDate:'',
+              departureDate: '',
+              email: '',
+              empno: '',
+              name: '',
+              paymentType: '',
+              roomType: '',
+              type: '',
+              uid: '',
+              vname: '',
+              vpurpose: ''
           };
     }
 
-    dateToString=(date)=>{
-      var dd = date.getDate();
-      var mm = date.getMonth() + 1;
+  dateToString=(date)=>{
 
-      var yyyy = date.getFullYear();
-      if (dd < 10) {
-        dd = '0' + dd;
-      } 
-      if (mm < 10) {
-        mm = '0' + mm;
-      } 
-      return dd + '/' + mm + '/' + yyyy;
+    console.log("Nonosecond: ",);
+    date = date.toDate().toLocaleDateString();//new Date(date.nanoseconds).toLocaleDateString();
+    console.log("Date: ",date);
+
+    var dd = date.split("/")[0];
+    var mm = parseInt(date.split("/")[1]) + 1;
+    var yyyy = date.split("/")[2];
+    if (dd < 10) {
+      dd = '0' + dd;
     }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    return dd + '/' + mm + '/' + yyyy;
+  }
 
 
     componentDidMount() {
-        const ref = this.bookingsRef.doc(this.props.match.params.id);
-        ref.get().then((doc) => {
-          if (doc.exists) {
-            let data = {}
-            data.name = doc.get('name');
-            data.status = doc.get('status');
-            data.room = doc.get('room');
-            data.from =  this.dateToString((doc.get('from')).toDate());
-            data.to =  this.dateToString((doc.get('to')).toDate());
-            this.setState({
-                booking: data,
-                key: doc.id,
-                isLoading: false
-            });
-          } else {
-            console.log("No such document!");
-          }
+      const ref = this.bookingsRef.doc(this.props.match.params.id);
+      ref.get().then((doc) => {
+        if (doc.exists) {
+          let data = {}
+          data.name = doc.get('name');
+          data.status = doc.get('status');
+          data.room = doc.get('room');
+          data.arrivalDate = this.dateToString(doc.get('departureDate'));
+          data.departureDate = this.dateToString(doc.get('arrivalDate'));
+          data.email = doc.get('email');
+          data.empno = doc.get('empno');
+          data.paymentType = doc.get('paymentType');
+          data.roomType = doc.get('roomType');
+          data.type = doc.get('type');
+          data.uid = doc.get('uid');
+          data.vname = doc.get('vname');
+          data.vpurpose = doc.get('vpurpose');
+
+          this.setState({
+            booking: data,
+            key: doc.id,
+            isLoading: false
+          });
+        } else {
+          console.log("No such document!");
+        }
+      });
+    }
+
+
+      cancel(id) {
+        // TODO to remove
+
+        firebase.firestore().collection('admin_req').doc(id).update({
+            status:"cancelled"
+        }).then(() =>{
+          this.props.history.push("/");
+        }).catch((error)=>{
+          console.error("Error removing document: ", error);
         });
       }
 
-
-
       delete(id){
-        firebase.firestore().collection('bookings').doc(id).delete().then(() => {
+      // TODO to remove
+        firebase.firestore().collection('admin_req').doc(id).delete().then(() => {
           console.log("Document successfully deleted!");
-          this.props.history.push("/")
+          this.props.history.push("/");
         }).catch((error) => {
           console.error("Error removing document: ", error);
         });
@@ -85,11 +121,17 @@ class Show extends React.Component{
                   <dt>Room No:</dt>
                   <dd>{this.state.booking.room}</dd>
                   <dt>From:</dt>
-                  <dd>{this.state.booking.from}</dd>
+                  <dd>{this.state.booking.arrivalDate}</dd>
                   <dt>To:</dt>
-                  <dd>{this.state.booking.to}</dd>
+                  <dd>{this.state.booking.departureDate}</dd>
+                  < dt > Payment: </dt> 
+                  <dd> {this.state.booking.paymentType}</dd>
                 </dl>
                 <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
+                 < button onClick = {
+                   this.cancel.bind(this, this.state.key)
+                 }
+                 class = "btn btn-primary" > Cancel </button>
                 <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
               </div>
             </div>

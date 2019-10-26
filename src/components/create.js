@@ -9,13 +9,13 @@ class Create extends Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection('bookings');
+    this.ref = firebase.firestore().collection('admin_req');
     this.state = {
       room: '',
       name:'',
       status:'',
       from:new Date(),
-      to:new Date()
+      to: new Date()
     };
   }
   onChange = (e) => {

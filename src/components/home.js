@@ -7,10 +7,11 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom';
 
 class Home extends React.Component{
+
   constructor(props){
       super(props);
       this.db = firebase.firestore();
-      this.bookingsRef = this.db.collection('bookings');
+      this.bookingsRef = this.db.collection('admin_req');
       this.unsubscribe = null;
 
       this.state = {
@@ -23,58 +24,75 @@ class Home extends React.Component{
           headerName: "ID", field: "bId",sortable: true,filter:true,
           cellRenderer: (cellValue) =>
               `<a href="/show/${cellValue.value}" >${cellValue.value}</a>`
-        }, {
+        },
+            {
           headerName: "Name", field: "name",sortable: true,filter:true
         }, {
           headerName: "Status", field: "status",sortable: true ,filter:true
         },
         {
-          headerName: "From", field: "from",sortable: true ,filter:true,
+          headerName: "From", field: "arrivalDate",sortable: true ,filter:true,
         },
         {
-          headerName: "To", field: "to",sortable: true ,filter:true,
+          headerName: "To", field: "departureDate",sortable: true ,filter:true,
         },
+            {
+                headerName: "Payment", field: "payment",sortable: true ,filter:true,
+            },
       ]
-      }
+      };
+
   }
 
     dateToString=(date)=>{
-      var dd = date.getDate();
-      var mm = date.getMonth() + 1;
 
-      var yyyy = date.getFullYear();
+        //console.log("Nonosecond: ",);
+        date = date.toDate().toLocaleDateString();//new Date(date.nanoseconds).toLocaleDateString();
+        //console.log("Date: ",date);
+
+      var dd = date.split("/")[0];
+      var mm = parseInt(date.split("/")[1]) + 1;
+      var yyyy = date.split("/")[2];
       if (dd < 10) {
         dd = '0' + dd;
-      } 
+      }
       if (mm < 10) {
         mm = '0' + mm;
-      } 
+      }
       return dd + '/' + mm + '/' + yyyy;
     }
 
     onCollectionUpdate = (querySnapshot) => {
+
     let bookingsList = [];
 
     querySnapshot.forEach((doc) => {
+
+
+        var arrivalDat = this.dateToString(doc.get('departureDate'));
+        var  departureDat = this.dateToString(doc.get('arrivalDate'));
       
-       var toDate = this.dateToString((doc.get('to')).toDate());
-       var fromDate = this.dateToString((doc.get('from')).toDate());
-      
-      let { checkedIn, room, name, status, from, to  } = doc.data();
+      let { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose  } = doc.data();
       bookingsList.push({
-        checkedIn,   
-        bId:doc.id, 
-        room, 
-        name, 
-        status,
-        from:fromDate,
-        to: toDate
+        bId: doc.id,
+       arrivalDate: arrivalDat,
+        departureDate: departureDat,
+        email, 
+        empno, 
+        name,
+         paymentType, 
+         roomType, 
+         type, 
+         uid,
+          vname, 
+          vpurpose
       });
     });
     
     this.setState({
              bookings:bookingsList
            })
+
   }
 
 
