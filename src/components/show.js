@@ -24,7 +24,8 @@ class Show extends React.Component{
               type: '',
               uid: '',
               vname: '',
-              vpurpose: ''
+              vpurpose: '',
+          status:''
           };
     }
 
@@ -35,7 +36,7 @@ class Show extends React.Component{
     console.log("Date: ",date);
 
     var dd = date.split("/")[0];
-    var mm = parseInt(date.split("/")[1]) + 1;
+    var mm = parseInt(date.split("/")[1]);
     var yyyy = date.split("/")[2];
     if (dd < 10) {
       dd = '0' + dd;
@@ -55,8 +56,8 @@ class Show extends React.Component{
           data.name = doc.get('name');
           data.status = doc.get('status');
           data.room = doc.get('room');
-          data.arrivalDate = this.dateToString(doc.get('departureDate'));
-          data.departureDate = this.dateToString(doc.get('arrivalDate'));
+          data.arrivalDate = this.dateToString(doc.get('arrivalDate'));
+          data.departureDate = this.dateToString(doc.get('departureDate'));
           data.email = doc.get('email');
           data.empno = doc.get('empno');
           data.paymentType = doc.get('paymentType');
@@ -65,6 +66,7 @@ class Show extends React.Component{
           data.uid = doc.get('uid');
           data.vname = doc.get('vname');
           data.vpurpose = doc.get('vpurpose');
+          data.show = doc.get("status");
 
           this.setState({
             booking: data,
@@ -103,7 +105,7 @@ class Show extends React.Component{
       render() {
         return (
           <div class="container">
-            <hr></hr>
+            <hr/>
             <h2><Link to="/" className="btn btn-primary">Home</Link></h2>
             <div class="panel panel-default">
               <div class="panel-heading">

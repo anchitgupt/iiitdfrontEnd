@@ -18,26 +18,26 @@ class Home extends React.Component{
         bookings : [],
         columnDefs: [
           {
-            headerName: "Room No", field: "room",sortable: true,filter:true,
+            headerName: "Room No", field: "room",sortable: true,filter:true,suppressSizeToFit: true,width:100,
           },
           {
-          headerName: "ID", field: "bId",sortable: true,filter:true,
+          headerName: "ID", field: "bId",sortable: true,filter:true,suppressSizeToFit: true,
           cellRenderer: (cellValue) =>
               `<a href="/show/${cellValue.value}" >${cellValue.value}</a>`
         },
             {
-          headerName: "Name", field: "name",sortable: true,filter:true
+          headerName: "Name", field: "name",sortable: true,filter:true,suppressSizeToFit: true,width:150
         }, {
-          headerName: "Status", field: "status",sortable: true ,filter:true
+          headerName: "Status", field: "status",sortable: true ,filter:true,suppressSizeToFit: true,width:100
         },
         {
-          headerName: "From", field: "arrivalDate",sortable: true ,filter:true,
+          headerName: "From", field: "arrivalDate",sortable: true ,filter:true,suppressSizeToFit: true,width:130
         },
         {
-          headerName: "To", field: "departureDate",sortable: true ,filter:true,
+          headerName: "To", field: "departureDate",sortable: true ,filter:true,suppressSizeToFit: true,width:130
         },
             {
-                headerName: "Payment", field: "payment",sortable: true ,filter:true,
+                headerName: "Payment", field: "payment",sortable: true ,filter:true,suppressSizeToFit: true,
             },
       ]
       };
@@ -48,17 +48,12 @@ class Home extends React.Component{
 
         //console.log("Nonosecond: ",);
         date = date.toDate().toLocaleDateString();//new Date(date.nanoseconds).toLocaleDateString();
-        //console.log("Date: ",date);
+         console.log("Date: ",date);
 
       var dd = date.split("/")[0];
-      var mm = parseInt(date.split("/")[1]) + 1;
+      var mm = parseInt(date.split("/")[1]);
+        console.log(date.split("/"));
       var yyyy = date.split("/")[2];
-      if (dd < 10) {
-        dd = '0' + dd;
-      }
-      if (mm < 10) {
-        mm = '0' + mm;
-      }
       return dd + '/' + mm + '/' + yyyy;
     }
 
@@ -72,7 +67,7 @@ class Home extends React.Component{
         var arrivalDat = this.dateToString(doc.get('departureDate'));
         var  departureDat = this.dateToString(doc.get('arrivalDate'));
       
-      let { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose  } = doc.data();
+      let { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose , status } = doc.data();
       bookingsList.push({
         bId: doc.id,
        arrivalDate: arrivalDat,
@@ -85,8 +80,11 @@ class Home extends React.Component{
          type, 
          uid,
           vname, 
-          vpurpose
+          vpurpose,
+          status
       });
+
+      bookingsList = bookingsList.reverse();
     });
     
     this.setState({
@@ -101,13 +99,15 @@ class Home extends React.Component{
   }
 
 
+
   render() {
     return (
+
       <div 
         className="ag-theme-balham"
         style={{ 
         height: '500px', 
-        width: '1200px' }} 
+        width: '100%' }}
       >
         <hr></hr>
         
@@ -115,7 +115,12 @@ class Home extends React.Component{
         <AgGridReact
           pagination = {true}
           columnDefs={this.state.columnDefs}
-          rowData={this.state.bookings}>
+          defaultColDef = {{resizable:true}}
+          colResizeDefault = {'shift'}
+          rowData={this.state.bookings}
+          enableRangeSelection={true}
+        >
+
         </AgGridReact>
       </div>
     );

@@ -54,8 +54,11 @@ class Edit extends Component {
     ref.get().then((doc) => {
       if (doc.exists) {
         const booking = doc.data();
+        console.log("booking.arrivalDate", booking.arrivalDate);
         var f = this.dateToString(booking.arrivalDate);
+        console.log("f: " , f);
         var t = this.dateToString(booking.departureDate);
+        //debugger
         this.setState({
           key: doc.id,
           arrivalDate: f,
@@ -79,20 +82,10 @@ class Edit extends Component {
   }
 
   dateToString=(date)=>{
-    //console.log("Nonosecond: ",);
-    date = date.toDate().toLocaleDateString();//new Date(date.nanoseconds).toLocaleDateString();
-    //console.log("Date: ",date);
+    date = date.toDate();//new Date(date.nanoseconds).toLocaleDateString();
+    console.log("Date: ",date);
 
-    var dd = date.split("/")[0];
-    var mm = parseInt(date.split("/")[1]) + 1;
-    var yyyy = date.split("/")[2];
-    if (dd < 10) {
-      dd = '0' + dd;
-    }
-    if (mm < 10) {
-      mm = '0' + mm;
-    }
-    return dd + '/' + mm + '/' + yyyy;
+    return date;
   }
 
 
@@ -105,7 +98,9 @@ class Edit extends Component {
   }
 
   getTimeStamp = (time) =>{
-    return firebase.firestore.Timestamp.fromDate(time);
+    var f = firebase.firestore.Timestamp.fromDate(time);
+    console.log("Timestamp:", f);
+    return f;
   }
 
   onSubmit = (e) => {
@@ -115,13 +110,9 @@ class Edit extends Component {
     let toTime = this.getTimeStamp(to);
     console.log("onSubmit", fromTime);
     console.log("onSubmit", toTime);
+    debugger
     const updateRef = firebase.firestore().collection('bookings').doc(this.state.key);
     updateRef.set({
-        // room,
-        // name,
-        // status,
-        // from:fromTime,
-        // to:toTime
       arrivalDate: fromTime,
       departureDate: toTime,
       email,
@@ -137,8 +128,8 @@ class Edit extends Component {
       this.setState({
         from:new Date(),
         to:new Date(),
-        arrivalDate:'',
-        departureDate:'',
+        arrivalDate:fromTime,
+        departureDate:toTime,
         email: '',
         empno: '',
         name: '',
@@ -160,7 +151,7 @@ class Edit extends Component {
   render() {
     return (
         <div class="container">
-          <hr></hr>
+          <hr/>
           <h2><Link to="/" className="btn btn-primary" >Home</Link></h2>
           <div class="panel panel-default">
             <div class="panel-heading">
