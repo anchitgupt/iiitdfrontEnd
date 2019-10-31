@@ -7,6 +7,8 @@ import Home from './components/home';
 import Show from './components/show';
 import Edit from './components/edit';
 import Create from './components/create';
+import CheckOut from './components/checkout';
+import Login from './components/login';
 
 
 
@@ -17,6 +19,8 @@ ReactDOM.render(<Router>
           <Route path='/show/:id' component={Show} />
           <Route path='/edit/:id' component={Edit} />
           <Route path='/create' component={Create} />
+          <Route path='/checkout' component={CheckOut} />
+           <Route path='/login' component={Login} />
       </Switch>
     </div>
   </Router>, document.getElementById('root'));

@@ -11,6 +11,7 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      rooms : 0,
       key: '',
       from:new Date(),
       to:new Date(),
@@ -24,7 +25,10 @@ class Edit extends Component {
       type: '',
       uid: '',
       vname: '',
-      vpurpose: ''
+      vpurpose: '',
+      status: '',
+      timestamp: '',
+      rooomno: ''
     };
   }
 
@@ -47,14 +51,22 @@ class Edit extends Component {
     });
   };
 
+  getRoomsAvailable = (arrivalDate, departureDate) => {
+    firebase.firestore().collection('booking').where("arrivalDate", "<=", arrivalDate).get().then((doc) =>{
+    });
+  };
+
   // while run
 
   componentDidMount() {
-    const ref = firebase.firestore().collection('admin_req').doc(this.props.match.params.id);
+    const ref = firebase.firestore().collection('booking').doc(this.props.match.params.id);
+
     ref.get().then((doc) => {
+      // TODO to add condition for checked out
       if (doc.exists) {
         const booking = doc.data();
         console.log("booking.arrivalDate", booking.arrivalDate);
+        this.state.rooms = this.getRoomsAvailable(booking.arrivalDate, booking.departureDate)
         var f = this.dateToString(booking.arrivalDate);
         console.log("f: " , f);
         var t = this.dateToString(booking.departureDate);
@@ -74,19 +86,22 @@ class Edit extends Component {
           vpurpose: booking.vpurpose,
           from:f,
           to: t,
+          roomno:booking.roomno,
+          timestamp:booking.timestamp
         });
+
       } else {
         console.log("No such document!");
       }
+
     });
   }
 
   dateToString=(date)=>{
-    date = date.toDate();//new Date(date.nanoseconds).toLocaleDateString();
+    date = date.toDate();
     console.log("Date: ",date);
-
     return date;
-  }
+  };
 
 
   // On submit
@@ -105,14 +120,16 @@ class Edit extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose, from ,to } = this.state;
+    const { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose, from ,to,timestamp, status, roomno } = this.state;
     let fromTime = this.getTimeStamp(from);
     let toTime = this.getTimeStamp(to);
+    let toStatus = (this.state.status).toString();
     console.log("onSubmit", fromTime);
     console.log("onSubmit", toTime);
     debugger
-    const updateRef = firebase.firestore().collection('bookings').doc(this.state.key);
-    updateRef.set({
+    const updateRef = firebase.firestore().collection('booking').doc(this.state.key);
+    
+    updateRef.update({
       arrivalDate: fromTime,
       departureDate: toTime,
       email,
@@ -123,7 +140,10 @@ class Edit extends Component {
       type,
       uid,
       vname,
-      vpurpose
+      vpurpose,
+      status: toStatus,
+      timestamp,
+      roomno
     }).then((docRef) => {
       this.setState({
         from:new Date(),
@@ -151,19 +171,20 @@ class Edit extends Component {
   render() {
     return (
         <div class="container">
-          <hr/>
           <h2><Link to="/" className="btn btn-primary" >Home</Link></h2>
+           <hr></hr>
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">
-                EDIT BOOKING
+                Edit Booking
               </h3>
             </div>
             <div class="panel-body">
               <form onSubmit={this.onSubmit}>
+                
                 <div class="form-group">
-                  <label for="room">Room:</label>
-                  <input type="text" class="form-control" name="room" value={this.state.room}   placeholder="Room" />
+                  <label for="roomno">Room:</label>
+                  <input type="text" class="form-control" name="roomno" value={this.state.roomno} onChange={this.onChange}  placeholder="Room" />
                 </div>
 
                 <div class="form-group">
@@ -177,7 +198,7 @@ class Edit extends Component {
                 </div>
 
                 <div class="form-group">
-                  <label for="name">Name:</label>
+                  <label for="name">Name: </label>
                   <input type="text" class="form-control" name="name" value={this.state.name} onChange={this.onChange} placeholder="Name" />
                 </div>
 
@@ -186,10 +207,10 @@ class Edit extends Component {
                   <br></br><DatePicker selected={this.state.from} dateFormat="dd/MM/yyyy" onChange={this.handleChangeFrom}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="to">To:</label>
-                  <br></br><DatePicker selected={this.state.to} dateFormat="dd/MM/yyyy" onChange={this.handleChangeTo}/>
+                  <label htmlFor="to">To: </label>
+                  <br></br>
+                  <DatePicker selected={this.state.to} dateFormat="dd/MM/yyyy" onChange={this.handleChangeTo}/>
                 </div>
-
                 <button type="submit" class="btn btn-success">Submit</button>
               </form>
             </div>

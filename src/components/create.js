@@ -9,13 +9,26 @@ class Create extends Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection('admin_req');
+    this.ref = firebase.firestore().collection('booking');
     this.state = {
-      room: '',
-      name:'',
-      status:'',
-      from:new Date(),
-      to: new Date()
+      rooms: 0,
+        key: '',
+        from: new Date(),
+        to: new Date(),
+        arrivalDate: '',
+        departureDate: '',
+        email: '',
+        empno: '',
+        name: '',
+        paymentType: '',
+        roomType: '',
+        type: '',
+        uid: '',
+        vname: '',
+        vpurpose: '',
+        status: '',
+        timestamp: '',
+        rooomno: ''
     };
   }
   onChange = (e) => {
@@ -44,23 +57,56 @@ class Create extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
-    const { room, checkedIn, name, status, from, to } = this.state;
+    const {
+      arrivalDate,
+      departureDate,
+      email,
+      empno,
+      name,
+      paymentType,
+      roomType,
+      type,
+      uid,
+      vname,
+      vpurpose,
+      from,
+      to,
+      timestamp,
+      status,
+      roomno
+    } = this.state;
     let fromTime = this.getTimeStamp(from);
     let toTime = this.getTimeStamp(to);
     this.ref.add({
-      room,
-        name,
-        status,
-        from:fromTime,
-        to:toTime
+     arrivalDate: fromTime,
+       departureDate: toTime,
+       email,
+       empno,
+       name,
+       paymentType,
+       roomType,
+       type,
+       uid,
+       vname,
+       vpurpose,
+       status,
+       timestamp,
+       roomno
     }).then((docRef) => {
       this.setState({
-        room: '',
-      name:'',
-      status:'',
-      from:new Date(),
-      to:new Date()
+       from: new Date(),
+         to: new Date(),
+         arrivalDate: fromTime,
+         departureDate: toTime,
+         email: '',
+         empno: '',
+         name: '',
+         paymentType: '',
+         roomType: '',
+         type: '',
+         uid: '',
+         vname: '',
+         vpurpose: ''
       });
       this.props.history.push("/")
     })
@@ -78,7 +124,7 @@ class Create extends Component {
         <div className="panel panel-default">
           <div className="panel-heading">
             <h3 className="panel-title">
-              ADD Booking
+              Add Booking
             </h3>
           </div>
           <div className="panel-body">
@@ -107,7 +153,6 @@ class Create extends Component {
                 <label htmlFor="to">To:</label>
                 <br></br><DatePicker selected={this.state.to} dateFormat="dd/MM/yyyy" onChange={this.handleChangeTo}/> 
             </div>
-
               <button type="submit" className="btn btn-success">Submit</button>
             </form>
           </div>

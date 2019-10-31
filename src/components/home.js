@@ -1,134 +1,217 @@
 import React from 'react';
 import '../App.css';
 import firebase from '../firebase';
-import { AgGridReact } from 'ag-grid-react';
+import {
+  AgGridReact
+} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { Link } from 'react-router-dom';
+import {
+  Link
+} from 'react-router-dom';
 
-class Home extends React.Component{
+class Home extends React.Component {
 
-  constructor(props){
-      super(props);
-      this.db = firebase.firestore();
-      this.bookingsRef = this.db.collection('admin_req');
-      this.unsubscribe = null;
+  constructor(props) {
+    super(props);
+    this.db = firebase.firestore();
+    this.bookingsRef = this.db.collection('booking');
+    this.unsubscribe = null;
 
-      this.state = {
-        bookings : [],
-        columnDefs: [
-          {
-            headerName: "Room No", field: "room",sortable: true,filter:true,suppressSizeToFit: true,width:100,
-          },
-          {
-          headerName: "ID", field: "bId",sortable: true,filter:true,suppressSizeToFit: true,
+    this.state = {
+      bookings: [],
+      columnDefs: [{
+          headerName: "",
+          field: "bId",
+          suppressSizeToFit: true,
+          width: 80,
+          autoHeight: true,
           cellRenderer: (cellValue) =>
-              `<a href="/show/${cellValue.value}" >${cellValue.value}</a>`
+            `<a href="/show/${cellValue.value}" id="${cellValue.value}" class="btn btn-info" role="button">Edit</a>`
         },
-            {
-          headerName: "Name", field: "name",sortable: true,filter:true,suppressSizeToFit: true,width:150
+        {
+          headerName: "Room No",
+          field: "roomno",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 100,
+          autoHeight: true
+        },
+
+        {
+          headerName: "Requester",
+          field: "name",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 150,
+          autoHeight: true
         }, {
-          headerName: "Status", field: "status",sortable: true ,filter:true,suppressSizeToFit: true,width:100
+          headerName: "Status",
+          field: "status",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 100,
+          autoHeight: true
+        }, {
+          headerName: "Report Time",
+          field: "timestamp",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 190,
+          autoHeight: true
         },
         {
-          headerName: "From", field: "arrivalDate",sortable: true ,filter:true,suppressSizeToFit: true,width:130
+          headerName: "From",
+          field: "arrivalDate",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 110,
+          autoHeight: true
         },
         {
-          headerName: "To", field: "departureDate",sortable: true ,filter:true,suppressSizeToFit: true,width:130
+          headerName: "To",
+          field: "departureDate",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 110,
+          autoHeight: true
         },
-            {
-                headerName: "Payment", field: "payment",sortable: true ,filter:true,suppressSizeToFit: true,
-            },
+        {
+          headerName: "Visitor Name",
+          field: "vname",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          autoHeight: true
+        },
+        {
+          headerName: "Visitor Purpose",
+          field: "vpurpose",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          autoHeight: true
+        },
+
       ]
-      };
+    };
 
   }
 
-    dateToString=(date)=>{
+  dateToString = (date) => {
 
-        //console.log("Nonosecond: ",);
-        date = date.toDate().toLocaleDateString();//new Date(date.nanoseconds).toLocaleDateString();
-         console.log("Date: ",date);
+    date = date.toDate().toLocaleDateString(); 
+    var dd = date.split("/")[0];
+    var mm = parseInt(date.split("/")[1]);
+    console.log(date.split("/"));
+    var yyyy = date.split("/")[2];
+    return dd + '/' + mm + '/' + yyyy;
+  }
 
-      var dd = date.split("/")[0];
-      var mm = parseInt(date.split("/")[1]);
-        console.log(date.split("/"));
-      var yyyy = date.split("/")[2];
-      return dd + '/' + mm + '/' + yyyy;
-    }
+  dateTimeToString = (date) => {
 
-    onCollectionUpdate = (querySnapshot) => {
+    
+    date = date.toDate(); 
+    return date.toString().substring(0, 25);
+  }
+
+  onCollectionUpdate = (querySnapshot) => {
+
+    console.log(querySnapshot.toString());
 
     let bookingsList = [];
 
     querySnapshot.forEach((doc) => {
 
+        if (doc.get('status') !== 'CheckedOut'){
 
-        var arrivalDat = this.dateToString(doc.get('departureDate'));
-        var  departureDat = this.dateToString(doc.get('arrivalDate'));
-      
-      let { arrivalDate, departureDate, email, empno, name, paymentType, roomType, type, uid, vname, vpurpose , status } = doc.data();
+      var arrivalDat = this.dateToString(doc.get('arrivalDate'));
+      var departureDat = this.dateToString(doc.get('departureDate'));
+
+      let {
+        arrivalDate,
+        departureDate,
+        email,
+        empno,
+        name,
+        paymentType,
+        roomType,
+        type,
+        uid,
+        vname,
+        vpurpose,
+        status,
+        timestamp,
+        roomno
+      } = doc.data();
       bookingsList.push({
         bId: doc.id,
-       arrivalDate: arrivalDat,
+        arrivalDate: arrivalDat,
         departureDate: departureDat,
-        email, 
-        empno, 
+        email,
+        empno,
         name,
-         paymentType, 
-         roomType, 
-         type, 
-         uid,
-          vname, 
-          vpurpose,
-          status
+        paymentType: doc.get('paymentType').toString(),
+        roomType,
+        type,
+        uid,
+        vname,
+        vpurpose,
+        status,
+        timestamp: this.dateTimeToString(doc.get('timestamp')),
+        roomno
       });
 
       bookingsList = bookingsList.reverse();
+    }
+
+
     });
-    
+
     this.setState({
-             bookings:bookingsList
-           })
+      bookings: bookingsList
+    })
 
   }
 
-
-  componentDidMount(){
+  componentDidMount() {
     this.unsubscribe = this.bookingsRef.onSnapshot(this.onCollectionUpdate);
   }
 
-
-
-  render() {
+  //  paste
+   render() {
     return (
-
       <div 
         className="ag-theme-balham"
         style={{ 
         height: '500px', 
         width: '100%' }}
       >
-        <hr></hr>
-        
-        <h4><Link to="/create" className="btn btn-primary">Add Booking</Link></h4>
+       
+        <h4 class="w3-margin-top"><Link to="/create" className="btn btn-primary">Add Booking</Link></h4>
+         <hr></hr>
         <AgGridReact
+        
           pagination = {true}
           columnDefs={this.state.columnDefs}
           defaultColDef = {{resizable:true}}
           colResizeDefault = {'shift'}
           rowData={this.state.bookings}
           enableRangeSelection={true}
+          enableRangeSelection={true}
+          animateRows={true}
         >
 
         </AgGridReact>
       </div>
     );
   }
-
-  
 }
-
-
 
 export default Home;
