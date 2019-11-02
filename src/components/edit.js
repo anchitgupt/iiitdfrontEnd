@@ -195,7 +195,7 @@ class Edit extends Component {
                     <option value="Approved">Approved</option>
                     <option value="CheckedIn">CheckedIn</option>
                     <option value="CheckedOut">CheckedOut</option>
-                    <option value="CheckedIn">CheckedIn</option>
+                    <option value="Cancelled">Cancelled</option>
                   </select>
                 </div>
 

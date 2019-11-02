@@ -121,7 +121,7 @@ class Home extends React.Component {
         },
         {
           headerName: "Payment Type",
-          field: "payment",
+          field: "paymentType",
           sortable: true,
           filter: true,
           suppressSizeToFit: true,
