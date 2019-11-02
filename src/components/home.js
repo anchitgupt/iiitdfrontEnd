@@ -119,7 +119,14 @@ class Home extends React.Component {
           suppressSizeToFit: true,
           autoHeight: true
         },
-
+        {
+          headerName: "Payment Type",
+          field: "payment",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          autoHeight: true
+        },
       ]
     };
 
@@ -232,15 +239,6 @@ class Home extends React.Component {
               width: '100%' }}
             >
 
-
-                  
-              {/* <div class="w3-row">
-                <div class="w3-container w3-twothird">
-                </div>
-              <div class="w3-container w3-third">
-                
-                </div>
-              </div> */}
              
               
               <hr></hr>
