@@ -8,7 +8,9 @@ import Show from './components/show';
 import Edit from './components/edit';
 import Create from './components/create';
 import CheckOut from './components/checkout';
+import CheckIn from './components/checkin';
 import Login from './components/login';
+import Cancel from './components/cancel';
 
 
 
@@ -20,7 +22,9 @@ ReactDOM.render(<Router>
           <Route path='/edit/:id' component={Edit} />
           <Route path='/create' component={Create} />
           <Route path='/checkout' component={CheckOut} />
-           <Route path='/login' component={Login} />
+          <Route path='/checkin' component={CheckIn} />
+          <Route path='/login' component={Login} />
+          <Route path='/cancel' component={Cancel} />
       </Switch>
     </div>
   </Router>, document.getElementById('root'));

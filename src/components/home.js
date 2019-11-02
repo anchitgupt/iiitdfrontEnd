@@ -4,6 +4,7 @@ import firebase from '../firebase';
 import {
   AgGridReact
 } from 'ag-grid-react';
+import withFirebaseAuth from 'react-with-firebase-auth'
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import {
@@ -19,8 +20,10 @@ class Home extends React.Component {
     this.unsubscribe = null;
 
     this.state = {
+      isSignedIn:false,
       bookings: [],
-      columnDefs: [{
+      columnDefs: [
+        {
           headerName: "",
           field: "bId",
           suppressSizeToFit: true,
@@ -35,10 +38,19 @@ class Home extends React.Component {
           sortable: true,
           filter: true,
           suppressSizeToFit: true,
-          width: 100,
-          autoHeight: true
+          autoHeight: true,
+          width: 100
         },
-
+        {
+          headerName: "Room Type",
+          field: "roomType",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          autoHeight: true,
+          width: 100,
+          cellRenderer: (cellValue) => `<Text style="text-transform:capitalize">${cellValue.value}</Text>`
+        },
         {
           headerName: "Requester",
           field: "name",
@@ -46,6 +58,15 @@ class Home extends React.Component {
           filter: true,
           suppressSizeToFit: true,
           width: 150,
+          autoHeight: true
+        }, 
+        {
+          headerName: "Type",
+          field: "type",
+          sortable: true,
+          filter: true,
+          suppressSizeToFit: true,
+          width: 100,
           autoHeight: true
         }, {
           headerName: "Status",
@@ -129,11 +150,10 @@ class Home extends React.Component {
 
     querySnapshot.forEach((doc) => {
 
-        if (doc.get('status') !== 'CheckedOut'){
+        if (doc.get('status') !== 'CheckedOut' && doc.get('status') !== 'Cancelled') {
 
       var arrivalDat = this.dateToString(doc.get('arrivalDate'));
       var departureDat = this.dateToString(doc.get('departureDate'));
-
       let {
         arrivalDate,
         departureDate,
@@ -182,36 +202,96 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.unsubscribe = this.bookingsRef.onSnapshot(this.onCollectionUpdate);
+     firebase.auth().onAuthStateChanged(user => {
+      this.setState({ isSignedIn: !!user })
+      if (user)
+      console.log("user", user);
+      else
+      this.props.history.push('/login');
+    });
+    
   }
 
   //  paste
+   //  paste
    render() {
-    return (
-      <div 
-        className="ag-theme-balham"
-        style={{ 
-        height: '500px', 
-        width: '100%' }}
-      >
-       
-        <h4 class="w3-margin-top"><Link to="/create" className="btn btn-primary">Add Booking</Link></h4>
-         <hr></hr>
-        <AgGridReact
-        
-          pagination = {true}
-          columnDefs={this.state.columnDefs}
-          defaultColDef = {{resizable:true}}
-          colResizeDefault = {'shift'}
-          rowData={this.state.bookings}
-          enableRangeSelection={true}
-          enableRangeSelection={true}
-          animateRows={true}
-        >
+    const {
+      user,
+      signOut,
+      signInWithGoogle,
+    } = this.props;
 
-        </AgGridReact>
+    return (
+      <div className="App">
+        <header className="App-header">
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          {
+            user
+              ? <div 
+              className="ag-theme-balham"
+              style={{ 
+              height: '460px', 
+              width: '100%' }}
+            >
+
+
+                  
+              {/* <div class="w3-row">
+                <div class="w3-container w3-twothird">
+                </div>
+              <div class="w3-container w3-third">
+                
+                </div>
+              </div> */}
+             
+              
+              <hr></hr>
+
+              <Link to="/create" className="btn btn-primary">Add Booking</Link>
+               <button onClick={signOut} class="btn btn-danger w3-margin" id="logout"><Link to="/login">Log Out</Link></button>
+               
+               <hr></hr>
+              <AgGridReact
+              
+                pagination = {true}
+                columnDefs={this.state.columnDefs}
+                defaultColDef = {{resizable:true}}
+                colResizeDefault = {'shift'}
+                rowData={this.state.bookings}
+                enableRangeSelection={true}
+                enableRangeSelection={true}
+                animateRows={true}
+              >
+      
+              </AgGridReact>
+            </div>
+              : 
+            <div class="btn white darken-4 col s10 m4">
+     <button onClick={signInWithGoogle} styles="text-transform:none">
+         <div class="left">
+             <img width="20px" alt="Google &quot;G&quot; Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+         </div>
+         Login with Google
+     </button>
+</div>
+              
+              
+              
+              
+            
+          }
+        </header>
       </div>
     );
   }
 }
+const firebaseAppAuth = firebase.auth();
 
-export default Home;
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+};
+
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(Home);

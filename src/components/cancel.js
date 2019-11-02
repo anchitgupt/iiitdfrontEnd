@@ -11,7 +11,7 @@ import {
     Link
 } from 'react-router-dom';
 
-class CheckOut extends React.Component {
+class Cancel extends React.Component {
 
     constructor(props) {
         super(props);
@@ -131,7 +131,7 @@ class CheckOut extends React.Component {
 
         querySnapshot.forEach((doc) => {
 
-            if (doc.get('status') == 'CheckedOut') {
+            if (doc.get('status') == 'Cancelled') {
 
                 var arrivalDat = this.dateToString(doc.get('arrivalDate'));
                 var departureDat = this.dateToString(doc.get('departureDate'));
@@ -185,16 +185,18 @@ class CheckOut extends React.Component {
     componentDidMount() {
         this.unsubscribe = this.bookingsRef.onSnapshot(this.onCollectionUpdate);
         firebase.auth().onAuthStateChanged(user => {
-      this.setState({ isSignedIn: !!user })
-      if (user)
-      console.log("user", user);
-      else
-      this.props.history.push('/login');
-    });
+            this.setState({
+                isSignedIn: !!user
+            })
+            if (user)
+                console.log("user", user);
+            else
+                this.props.history.push('/login');
+        });
     }
 
     //  paste
-    render() {
+   render() {
     const {
       user,
       signOut,
@@ -274,4 +276,4 @@ const providers = {
 export default withFirebaseAuth({
   providers,
   firebaseAppAuth,
-})(CheckOut);
+})(Cancel);

@@ -15,7 +15,9 @@ class App extends Component {
               <Route path='/edit/:id' component={Edit} />
               <Route path='/create' component={Create} />
               <Route path='/checkout' component={CheckOut} />
+              <Route path='/checkin' component={CheckIn} />
               <Route path='/login' component={Login} />
+              <Route path='/cancel' component={Cancel} />
           </Switch>
         </div>
       </Router>

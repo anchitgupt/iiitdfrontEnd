@@ -25,6 +25,7 @@ class Login extends Component {
   render() {
     return (
       <div className="Login">
+         <h1 class="w3-center">IIITD Guest House | Log In</h1>
         {this.state.isSignedIn ? (
          this.props.history.push('/')
         ) : (

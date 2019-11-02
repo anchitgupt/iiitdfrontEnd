@@ -11,7 +11,7 @@ import {
     Link
 } from 'react-router-dom';
 
-class CheckOut extends React.Component {
+class CheckIn extends React.Component {
 
     constructor(props) {
         super(props);
@@ -131,7 +131,7 @@ class CheckOut extends React.Component {
 
         querySnapshot.forEach((doc) => {
 
-            if (doc.get('status') == 'CheckedOut') {
+            if (doc.get('status') == 'CheckedIn') {
 
                 var arrivalDat = this.dateToString(doc.get('arrivalDate'));
                 var departureDat = this.dateToString(doc.get('departureDate'));
@@ -274,4 +274,4 @@ const providers = {
 export default withFirebaseAuth({
   providers,
   firebaseAppAuth,
-})(CheckOut);
+})(CheckIn);

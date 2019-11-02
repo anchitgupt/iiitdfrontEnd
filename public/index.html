@@ -6,7 +6,7 @@
      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- <meta name="theme-color" content="#000000" /> -->
+    <meta name="theme-color" content="#000000" />
     <title>IIITD Guest House</title>
   </head>
   
@@ -19,20 +19,26 @@
           <a class="nav-link" href="/">IIITD Guest House Booking</a>
         </li> -->
         <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/checkout">CheckedOut</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">CheckIn</a>
+          <a class="nav-link" href="/checkin">CheckIn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/cancel">Cancelled</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0 ml-auto">
-        <button class="btn btn-danger btn-md my-2 my-sm-0 ml-3" id="logout"}>Log Out</button>
-      </form>
+      <!-- <form class="form-inline my-2 my-lg-0 ml-auto">
+        <button class="btn btn-danger btn-md my-2 my-sm-0 ml-3" id="logout">Log Out</button>
+      </form> -->
+      <div id="logout"></div>
     </nav>
     </div>
 
     <div class="container w3-margin-top">
-      
       <!-- <h2 class="md-2">IIITD Guest House Booking</h2> -->
       <div id="root"></div>
     </div>

@@ -46,7 +46,7 @@ class Show extends React.Component{
       ref.get().then((doc) => {
         if (doc.exists) {
           let data = {};
-
+          data.key = doc.get('key');
           data.name = doc.get('name');
           data.status = doc.get('status');
           data.arrivalDate = this.dateToString(doc.get('arrivalDate'));
@@ -97,10 +97,73 @@ class Show extends React.Component{
 
       render() {
         return (
-          <div class="container">
+          <div class="container well">
             <h2><Link to="/" className="btn btn-primary">Home</Link></h2>
             <hr></hr>
-            <div class="panel panel-default">
+ <form>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label font-weight-bold">Name</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="name" value={this.state.booking.name}/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Status</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="status" value={this.state.booking.status}/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Type</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="type" value={this.state.booking.type}/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Arrival Date</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="arrivalDate" value={this.state.booking.arrivalDate}/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Departure Date</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="departureDate" value={this.state.booking.departureDate}/>
+    </div>
+  </div>
+  {/* <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Payment type</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="staticEmail" value={this.state.booking.paymentType}/>
+    </div>
+  </div> */}
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Visitor Name</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="vname" value={this.state.booking.vname}/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label">Visitor Purpose</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext text-justify" id="vpurpose" value={this.state.booking.vpurpose}/>
+    </div>
+  </div>
+   <div class="form-group row">
+    <div class="col-sm-10">
+      <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
+    </div>
+  </div>
+  
+  {/* <div class="form-group row">
+    <div class="col-sm-10">
+      <button onClick = {this.delete.bind(this, this.state.key)} class = "btn btn-danger" > Delete </button>
+    </div>
+  </div> */}
+</form>
+           
+
+            {/* <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">
                   Name:{this.state.booking.name}
@@ -130,7 +193,7 @@ class Show extends React.Component{
                  <button onClick = {this.cancel.bind(this, this.state.key)} class = "btn btn-primary" > Cancel </button>
                  <button onClick = {this.delete.bind(this, this.state.key)} class = "btn btn-danger" > Delete </button>
               </div>
-            </div>
+            </div> */}
           </div>
         );
       }
