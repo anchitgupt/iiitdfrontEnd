@@ -238,8 +238,6 @@ class Home extends React.Component {
               height: '460px', 
               width: '100%' }}
             >
-
-             
               
               <hr></hr>
 
