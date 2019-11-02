@@ -39,7 +39,16 @@ class CheckIn extends React.Component {
                     width: 100,
                     autoHeight: true
                 },
-
+                {
+                  headerName: "Room Type",
+                  field: "roomType",
+                  sortable: true,
+                  filter: true,
+                  suppressSizeToFit: true,
+                  autoHeight: true,
+                  width: 100,
+                  cellRenderer: (cellValue) => `<Text style="text-transform:capitalize">${cellValue.value}</Text>`
+                },
                 {
                     headerName: "Requester",
                     field: "name",
@@ -205,9 +214,7 @@ class CheckIn extends React.Component {
       <div className="App">
         <header className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          {
-            user
-              ? <div 
+         <div 
               className="ag-theme-balham"
               style={{ 
               height: '460px', 
@@ -227,7 +234,7 @@ class CheckIn extends React.Component {
               
               <hr></hr>
 
-              <Link to="/create" className="btn btn-primary">Add Booking</Link>
+              {/* <Link to="/create" className="btn btn-primary">Add Booking</Link> */}
                <button onClick={signOut} class="btn btn-danger w3-margin" id="logout"><Link to="/login">Log Out</Link></button>
                
                <hr></hr>
@@ -245,21 +252,7 @@ class CheckIn extends React.Component {
       
               </AgGridReact>
             </div>
-              : 
-            <div class="btn white darken-4 col s10 m4">
-     <button onClick={signInWithGoogle} styles="text-transform:none">
-         <div class="left">
-             <img width="20px" alt="Google &quot;G&quot; Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
-         </div>
-         Login with Google
-     </button>
-</div>
               
-              
-              
-              
-            
-          }
         </header>
       </div>
     );

@@ -17,15 +17,21 @@ class Login extends Component {
 
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
-      this.setState({ isSignedIn: !!user })
-      console.log("user", user)
+      if (user !== null && user['email'].split("@")[1] !== "iiitd.ac.in") {
+        firebase.auth().signOut().then(() => {});
+        //  alert("Use Only authorized Mail");
+        this.props.history.push('/');
+        alert('Use Valid Mail');
+      }else{
+        this.setState({ isSignedIn: !!user })
+      }
     });
   }
 
   render() {
     return (
       <div className="Login">
-         <h1 class="w3-center">IIITD Guest House | Log In</h1>
+         <h1 class="w3-center w3-margin">IIITD Guest House | Log In</h1>
         {this.state.isSignedIn ? (
          this.props.history.push('/')
         ) : (

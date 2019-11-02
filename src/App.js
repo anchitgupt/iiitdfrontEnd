@@ -18,6 +18,7 @@ class App extends Component {
               <Route path='/checkin' component={CheckIn} />
               <Route path='/login' component={Login} />
               <Route path='/cancel' component={Cancel} />
+              <Route path='/feedback' component={Feedback} />
           </Switch>
         </div>
       </Router>

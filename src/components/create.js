@@ -122,11 +122,11 @@ class Create extends Component {
         <hr></hr>
         <h4><Link to="/" className="btn btn-primary">Home</Link></h4>
         <div className="panel panel-default">
-          <div className="panel-heading">
+          {/* <div className="panel-heading">
             <h3 className="panel-title">
               Add Booking
             </h3>
-          </div>
+          </div> */}
           <div className="panel-body">
             <form onSubmit={this.onSubmit}>
             <div className="form-group">
