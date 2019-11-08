@@ -16,7 +16,7 @@ class Cancel extends React.Component {
     constructor(props) {
         super(props);
         this.db = firebase.firestore();
-        this.bookingsRef = this.db.collection('booking');
+         this.bookingsRef = this.db.collection('booking').orderBy('timestamp');
         this.unsubscribe = null;
 
         this.state = {
@@ -30,15 +30,15 @@ class Cancel extends React.Component {
                     cellRenderer: (cellValue) =>
                         `<a href="/show/${cellValue.value}" id="${cellValue.value}" class="btn btn-info" role="button">Edit</a>`
                 },
-                {
-                    headerName: "Room No",
-                    field: "roomno",
-                    sortable: true,
-                    filter: true,
-                    suppressSizeToFit: true,
-                    width: 100,
-                    autoHeight: true
-                },
+                // {
+                //     headerName: "Room No",
+                //     field: "roomno",
+                //     sortable: true,
+                //     filter: true,
+                //     suppressSizeToFit: true,
+                //     width: 100,
+                //     autoHeight: true
+                // },
                 {
                     headerName: "Room Type",
                     field: "roomType",

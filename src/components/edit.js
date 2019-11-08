@@ -29,7 +29,6 @@ class Edit extends Component {
       status: '',
       timestamp: '',
       rooomno: '',
-      status:''
     };
   }
 
@@ -88,7 +87,8 @@ class Edit extends Component {
           from:f,
           to: t,
           roomno:booking.roomno,
-          timestamp:booking.timestamp
+          timestamp:booking.timestamp,
+          status:booking.status
         });
 
       } else {
@@ -191,7 +191,7 @@ class Edit extends Component {
                 <div class="form-group">
                   <label for="name">Status:</label>
                   <select name="status" onChange={this.onChange} value={this.state.status} class="form-control form-control-lg">
-                    <option value="Requsted">Requsted</option>
+                    <option value="Requested">Requested</option>
                     <option value="Approved">Approved</option>
                     <option value="CheckedIn">CheckedIn</option>
                     <option value="CheckedOut">CheckedOut</option>

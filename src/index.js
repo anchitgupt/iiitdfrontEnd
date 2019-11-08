@@ -12,6 +12,7 @@ import CheckIn from './components/checkin';
 import Login from './components/login';
 import Cancel from './components/cancel';
 import Feedback from './components/feedback';
+import NoMatch from './components/noMatch';
 
 
 
@@ -26,7 +27,8 @@ ReactDOM.render(<Router>
           <Route path='/checkin' component={CheckIn} />
           <Route path='/login' component={Login} />
           <Route path='/cancel' component={Cancel} />
-            <Route path='/feedback' component={Feedback} />
+          <Route path='/feedback' component={Feedback} />
+          <Route component={NoMatch} />     
       </Switch>
     </div>
   </Router>, document.getElementById('root'));

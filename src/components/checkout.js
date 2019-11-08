@@ -16,7 +16,7 @@ class CheckOut extends React.Component {
     constructor(props) {
         super(props);
         this.db = firebase.firestore();
-        this.bookingsRef = this.db.collection('booking');
+        this.bookingsRef = this.db.collection('booking').orderBy('timestamp', 'asc');
         this.unsubscribe = null;
 
         this.state = {

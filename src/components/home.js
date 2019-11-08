@@ -16,7 +16,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.db = firebase.firestore();
-    this.bookingsRef = this.db.collection('booking');
+    this.bookingsRef = this.db.collection('booking').orderBy('timestamp');
     this.unsubscribe = null;
 
     this.state = {
@@ -151,7 +151,6 @@ class Home extends React.Component {
 
   onCollectionUpdate = (querySnapshot) => {
 
-    console.log(querySnapshot.toString());
 
     let bookingsList = [];
 
@@ -195,11 +194,13 @@ class Home extends React.Component {
         roomno
       });
 
-      bookingsList = bookingsList.reverse();
+      bookingsList = bookingsList;
     }
 
 
     });
+
+    bookingsList = bookingsList.reverse();
 
     this.setState({
       bookings: bookingsList
@@ -209,6 +210,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.unsubscribe = this.bookingsRef.onSnapshot(this.onCollectionUpdate);
+    
      firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
       if (user)
